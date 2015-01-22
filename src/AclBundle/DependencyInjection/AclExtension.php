@@ -26,6 +26,7 @@ class AclExtension extends Extension
         $rb->addArgument([
             $config['default_allowed'], // if allowed to any resource by default
             $this->getAlias().ucfirst($container->getParameter('kernel.environment')), // cache prefix
+            $container->getParameter('kernel.debug'), // debug
         ]);
         $container->setDefinition('acl.resource.builder', $rb);
 
