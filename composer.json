@@ -1,0 +1,32 @@
+{
+  "name": "data-dog/acl-bundle",
+  "type": "bundle",
+  "description": "ACL management bundle",
+
+  "autoload": {
+    "psr-0": {
+      "AclBundle\\": "src/"
+    }
+  },
+
+  "require": {
+    "php": ">=5.4.0",
+    "symfony/symfony": "~2.5"
+  },
+
+  "require-dev": {
+    "phpspec/phpspec": "~2.1.0"
+  },
+
+  "bin": [
+    "src/AclBundle/Resources/bin/acl"
+  ],
+
+  "archive": {
+    "exclude": ["vendor", "spec", "bin"]
+  },
+
+  "config": {
+    "bin-dir": "bin"
+  }
+}
