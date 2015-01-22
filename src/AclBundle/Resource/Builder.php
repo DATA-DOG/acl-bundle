@@ -24,7 +24,7 @@ class Builder implements WarmableInterface
         ) = $options;
     }
 
-    public function registerProvider(ProviderInterface $provider)
+    public function provider(ProviderInterface $provider)
     {
         $this->providers[] = $provider;
     }
@@ -35,34 +35,54 @@ class Builder implements WarmableInterface
     public function warmUp($cacheDir)
     {
         $this->cacheDir = $cacheDir;
-        $this->getTree();
+        $this->tree();
     }
 
-    public function getTree()
+    public function tree()
     {
         if (null !== $this->tree) {
             return $this->tree;
+        }
+
+        if (null === $this->cachePrefix) {
+            return $this->tree = new DefaultTree($this->load());
         }
 
         $class = $this->cacheClass();
         $cache = new ConfigCache($this->cacheDir.'/'.$class.'.php', $this->debug);
 
         if (!$cache->isFresh()) {
-            $content = $this->buildResourceTree($this->loadAll());
+            $content = $this->buildResourceTree($this->load());
             $cache->write($content);
         }
         require_once $cache;
         return $this->tree = new $class();
     }
 
-    protected function loadAll()
+    protected function load()
     {
         $resources = [];
         foreach ($this->providers as $provider) {
-            $resources = array_merge($resources, $provider->getResources());
+            $resources = array_merge($resources, $provider->resources());
         }
         $this->validate($resources);
-        return $resources;
+
+        // generate a resource map
+        $tree = [];
+        foreach ($resources as $resource => $actions) {
+            $next = &$tree;
+            $parts = explode('.', $resource);
+            while ($part = array_shift($parts)) {
+                if (!array_key_exists($part, $next)) {
+                    $next[$part] = [];
+                }
+                $next = &$next[$part];
+            }
+            foreach ($actions as $action) {
+                $next[$action] = $this->defaultAllowed;
+            }
+        }
+        return $tree;
     }
 
     protected function validate(array $resources)
@@ -80,7 +100,7 @@ class Builder implements WarmableInterface
                 throw new \UnexpectedValueException("ACL resource \"{$resource}\" cannot end with a dot");
             }
 
-            if (preg_match('/\.^/', $resource)) {
+            if (preg_match('/^\./', $resource)) {
                 throw new \UnexpectedValueException("ACL resource \"{$resource}\" cannot start with a dot");
             }
 
@@ -107,22 +127,7 @@ class Builder implements WarmableInterface
      */
     protected function buildResourceTree(array $resources)
     {
-        $store = [];
-        foreach ($resources as $resource => $actions) {
-            $next = &$store;
-            $parts = explode('.', $resource);
-            while ($part = array_shift($parts)) {
-                if (!array_key_exists($part, $next)) {
-                    $next[$part] = [];
-                }
-                $next = &$next[$part];
-            }
-            foreach ($actions as $action) {
-                $next[$action] = $this->defaultAllowed;
-            }
-        }
-
-        $resources = var_export($store, true);
+        $resources = var_export($resources, true);
         return <<<EOF
 <?php
 

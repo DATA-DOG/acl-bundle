@@ -15,7 +15,8 @@
   },
 
   "require-dev": {
-    "phpspec/phpspec": "~2.1.0"
+    "phpunit/phpunit": "~4.4",
+    "phpspec/prophecy-phpunit": "~1.0"
   },
 
   "bin": [
@@ -23,7 +24,7 @@
   ],
 
   "archive": {
-    "exclude": ["vendor", "spec", "bin"]
+    "exclude": ["vendor", "tests", "bin"]
   },
 
   "config": {
