@@ -1,0 +1,7 @@
+services:
+  acl.resource.cache_warmer:
+    class: AclBundle\CacheWarmer\AclResourceCacheWarmer
+    arguments: [@acl.resource.builder]
+    public: false
+    tags:
+      - { name: kernel.cache_warmer }
