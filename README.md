@@ -13,7 +13,7 @@ acl:
 
 A resource is basically represented by a string.
 
-    $acl->allowed("app.resource.string", "action");
+    $acl->isAllowed("action", "app.resource.string");
 
 Would be **"app.resource.string.action"**. Action is concatenated. That way
 it is easier to store and match resources.

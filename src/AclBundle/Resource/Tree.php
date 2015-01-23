@@ -22,14 +22,14 @@ abstract class Tree
                     throw new \RuntimeException("The access to resource \"{$resource}\" cannot be mapped, since this resource was not registered.");
                 }
 
+                // move down the head
+                $head = &$head[$point];
+
                 // if last access point - means map to all remaining access points
                 if (!count($points)) {
                     $this->mapRemainingAccessPoints($head);
                     continue;
                 }
-
-                // move down the head
-                $head = &$head[$point];
             }
         }
         return $this;
