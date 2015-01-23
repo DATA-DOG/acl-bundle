@@ -19,8 +19,14 @@ class AclExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
-        $loader->load('cache_warmers.yml');
+        $loader->load('resource_providers.yml');
 
+        // add tags to resource providers
+        foreach ($config['resource_providers'] as $name => $enabled) {
+            $enabled && $container->getDefinition('acl.resource.provider.'.$name)->addTag('acl.resource.provider');
+        }
+
+        // resource builder
         $rb = new Definition($container->getParameter('acl.resource.builder.class'));
         // options
         $rb->addArgument([
@@ -29,8 +35,5 @@ class AclExtension extends Extension
             $container->getParameter('kernel.debug'), // debug
         ]);
         $container->setDefinition('acl.resource.builder', $rb);
-
-        $dm = new Definition($container->getParameter('acl.authorization.decision_manager.class'));
-        $container->setDefinition('acl.authorization.decision_manager', $dm);
     }
 }

@@ -1,8 +1,15 @@
 parameters:
   acl.resource.builder.class: AclBundle\Resource\Builder
-  acl.authorization.decision_manager.class: AclBundle\Access\DecisionManager
+  acl.access.decision_manager.class: AclBundle\Access\DecisionManager
 
 services:
-  acl.decision_manager:
-    class: %acl.authorization.decision_manager.class%
+  acl.access.decision_manager:
+    class: %acl.access.decision_manager.class%
     arguments: [@acl.resource.builder]
+
+  acl.resource.cache_warmer:
+    class: AclBundle\CacheWarmer\AclResourceCacheWarmer
+    arguments: [@acl.resource.builder]
+    public: false
+    tags:
+      - { name: kernel.cache_warmer }

@@ -1,0 +1,5 @@
+services:
+  # adds tags based on configuration
+  acl.resource.provider.bundle_configuration:
+    class: AclBundle\Resource\Provider\BundleConfigurationProvider
+    arguments: [@kernel]
