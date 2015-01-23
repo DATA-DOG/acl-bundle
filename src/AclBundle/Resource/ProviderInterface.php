@@ -7,7 +7,7 @@ interface ProviderInterface
     /**
      * Get a list of available ACL resources
      *
-     * @return array - map ['resource.string' => ['edit', 'view']]
+     * @return array - ['resource.string.action', ...]
      */
     function resources();
 }

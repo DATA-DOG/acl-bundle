@@ -11,9 +11,12 @@ acl:
 
 ## ACL resource
 
-A resource is basically represented by two strings
+A resource is basically represented by a string.
 
     $acl->allowed("app.resource.string", "action");
+
+Would be **"app.resource.string.action"**. Action is concatenated. That way
+it is easier to store and match resources.
 
 - **app.resource.string** - is a resource acccess point.
 - **action** - is any action that can be done with the resource bellow.
@@ -33,7 +36,7 @@ interface ProviderInterface
     /**
      * Get a list of available ACL resources
      *
-     * @return array - map ['resource.string' => ['edit', 'view']]
+     * @return array - ['resource.string.action', ...]
      */
     function resources();
 }

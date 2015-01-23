@@ -1,3 +1,3 @@
 parameters:
   acl.resource.builder.class: AclBundle\Resource\Builder
-  acl.authorization.decision_manager.class: AclBundle\Authorization\DecisionManager
+  acl.authorization.decision_manager.class: AclBundle\Access\DecisionManager

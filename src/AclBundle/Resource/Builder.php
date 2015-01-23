@@ -66,20 +66,24 @@ class Builder implements WarmableInterface
             $resources = array_merge($resources, $provider->resources());
         }
         $this->validate($resources);
+        asort($resources);
 
         // generate a resource map
         $tree = [];
-        foreach ($resources as $resource => $actions) {
+        foreach ($resources as $resource) {
             $next = &$tree;
             $parts = explode('.', $resource);
             while ($part = array_shift($parts)) {
+                // if last part - action
+                if (!count($parts)) {
+                    $next[$part] = $this->defaultAllowed;
+                    continue;
+                }
+
                 if (!array_key_exists($part, $next)) {
                     $next[$part] = [];
                 }
                 $next = &$next[$part];
-            }
-            foreach ($actions as $action) {
-                $next[$action] = $this->defaultAllowed;
             }
         }
         return $tree;
@@ -87,11 +91,7 @@ class Builder implements WarmableInterface
 
     protected function validate(array $resources)
     {
-        foreach ($resources as $resource => $actions) {
-            if (count($actions) === 0) {
-                throw new \UnexpectedValueException("ACL resource \"{$resource}\" must have at least one action");
-            }
-
+        foreach ($resources as $resource) {
             if (preg_match('/[^a-z0-9_\.]/', $resource)) {
                 throw new \UnexpectedValueException("ACL resource \"{$resource}\" can have only lowercase ASCII characters, dots and underscores");
             }
@@ -102,12 +102,6 @@ class Builder implements WarmableInterface
 
             if (preg_match('/^\./', $resource)) {
                 throw new \UnexpectedValueException("ACL resource \"{$resource}\" cannot start with a dot");
-            }
-
-            foreach ($actions as $action) {
-                if (preg_match('/[^a-z_]/', $action)) {
-                    throw new \UnexpectedValueException("ACL resource \"{$resource}\" action \"{$action}\" can have only lowercase ASCII characters and underscores");
-                }
             }
         }
     }
@@ -122,7 +116,7 @@ class Builder implements WarmableInterface
      * Takes all available application ACL resources and
      * builds an ACL tree cache class body
      *
-     * @param array $resources - ['resource.string' => ['edit', 'view']]
+     * @param array $resources
      * @return string
      */
     protected function buildResourceTree(array $resources)

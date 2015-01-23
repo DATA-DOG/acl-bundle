@@ -34,7 +34,7 @@ class BuilderTest extends ProphecyTestCase
     {
         $this->builder->provider($this->provider->reveal());
         $this->provider->resources()->willReturn([
-            'some.resource' => ['edit'],
+            'some.resource.edit',
         ]);
 
         $expected = [
@@ -55,29 +55,31 @@ class BuilderTest extends ProphecyTestCase
     {
         $this->builder->provider($this->provider->reveal());
         $this->provider->resources()->willReturn([
-            'some.resource' => ['edit'],
-            'some.entity' => ['edit', 'view', 'delete'],
-            'app.res.main' => ['see'],
+            'some.resource.edit',
+            'some.entity.edit',
+            'some.entity.view',
+            'some.entity.delete',
+            'app.res.main.see',
         ]);
 
         $expected = [
-            'some' => [
-                'resource' => [
-                    'edit' => false
-                ],
-                'entity' => [
-                    'edit' => false,
-                    'view' => false,
-                    'delete' => false,
-                ]
-            ],
             'app' => [
                 'res' => [
                     'main' => [
                         'see' => false
                     ]
                 ]
-            ]
+            ],
+            'some' => [
+                'entity' => [
+                    'delete' => false,
+                    'edit' => false,
+                    'view' => false,
+                ],
+                'resource' => [
+                    'edit' => false
+                ],
+            ],
         ];
         $this->assertSame($expected, $this->builder->tree()->all());
     }
@@ -90,7 +92,7 @@ class BuilderTest extends ProphecyTestCase
     {
         $this->builder->provider($this->provider->reveal());
         $this->provider->resources()->willReturn([
-            'some.non.ascįį' => ['edit'],
+            'some.non.ascįį.edit',
         ]);
 
         $this->builder->tree();
@@ -104,7 +106,7 @@ class BuilderTest extends ProphecyTestCase
     {
         $this->builder->provider($this->provider->reveal());
         $this->provider->resources()->willReturn([
-            'has-dash' => ['edit'],
+            'has-dash.edit',
         ]);
 
         $this->builder->tree();
@@ -118,7 +120,7 @@ class BuilderTest extends ProphecyTestCase
     {
         $this->builder->provider($this->provider->reveal());
         $this->provider->resources()->willReturn([
-            '.starts.with.dot' => ['edit'],
+            '.starts.with.dot',
         ]);
 
         $this->builder->tree();
@@ -132,49 +134,7 @@ class BuilderTest extends ProphecyTestCase
     {
         $this->builder->provider($this->provider->reveal());
         $this->provider->resources()->willReturn([
-            'ends.with.dot.' => ['edit'],
-        ]);
-
-        $this->builder->tree();
-    }
-
-    /**
-     * @test
-     * @expectedException UnexpectedValueException
-     */
-    function it_should_not_allow_utf_chars_in_resource_action()
-    {
-        $this->builder->provider($this->provider->reveal());
-        $this->provider->resources()->willReturn([
-            'res' => ['ąction'],
-        ]);
-
-        $this->builder->tree();
-    }
-
-    /**
-     * @test
-     * @expectedException UnexpectedValueException
-     */
-    function it_should_not_allow_a_resource_without_action()
-    {
-        $this->builder->provider($this->provider->reveal());
-        $this->provider->resources()->willReturn([
-            'res' => [],
-        ]);
-
-        $this->builder->tree();
-    }
-
-    /**
-     * @test
-     * @expectedException UnexpectedValueException
-     */
-    function it_should_not_allow_dots_in_resource_action()
-    {
-        $this->builder->provider($this->provider->reveal());
-        $this->provider->resources()->willReturn([
-            'res' => ['dotted.action'],
+            'ends.with.dot.',
         ]);
 
         $this->builder->tree();

@@ -1,6 +1,6 @@
 <?php
 
-namespace AclBundle\Authorization;
+namespace AclBundle\Access;
 
 class DecisionManager
 {
