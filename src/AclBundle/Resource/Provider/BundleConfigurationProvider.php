@@ -28,6 +28,10 @@ class BundleConfigurationProvider implements ProviderInterface
         $resources = [];
         foreach ($files as $file) {
             $config = Yaml::parse(file_get_contents($file));
+            if (!array_key_exists('resources', $config)) {
+                throw new \RuntimeException("The acl file: {$file} is not valid acl resource file.");
+            }
+            $resources = array_merge($config['resources']);
         }
         return $resources;
     }

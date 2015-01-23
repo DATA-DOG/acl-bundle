@@ -20,6 +20,17 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         ->booleanNode('bundle_configuration')->defaultTrue()->end()
                     ->end()
+                ->end()
+                ->arrayNode('access_providers')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                    ->end()
+                ->end()
+                ->arrayNode('accesses')
+                    ->useAttributeAsKey('username')
+                    ->prototype('array')
+                        ->prototype('scalar')->end()
+                ->end()
             ->end();
 
         return $treeBuilder;

@@ -20,6 +20,7 @@ class Builder implements WarmableInterface
         list(
             $this->defaultAllowed,
             $this->cachePrefix,
+            $this->cacheDir,
             $this->debug
         ) = $options;
     }
@@ -34,6 +35,7 @@ class Builder implements WarmableInterface
      */
     public function warmUp($cacheDir)
     {
+        // overrides cache dir
         $this->cacheDir = $cacheDir;
         $this->tree();
     }

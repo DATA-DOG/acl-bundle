@@ -1,0 +1,5 @@
+services:
+  # adds tags based on configuration
+  acl.access.provider.config:
+    class: AclBundle\Access\Provider\ConfigProvider
+    arguments: [@security.context]
