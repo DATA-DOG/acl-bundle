@@ -7,4 +7,6 @@ namespace AclBundle\Resource\Provider\Annotation;
  * @Target({"METHOD"})
  */
 class ACL
-{}
+{
+    public $resource;
+}

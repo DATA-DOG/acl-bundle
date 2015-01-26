@@ -47,14 +47,14 @@ class Builder implements WarmableInterface
         }
 
         if (null === $this->cachePrefix) {
-            return $this->tree = new DefaultTree($this->load(), $this->defaultAllowed);
+            return $this->tree = new DefaultTree($this->load());
         }
 
         $class = $this->cacheClass();
         $cache = new ConfigCache($this->cacheDir.'/'.$class.'.php', $this->debug);
 
         if (!$cache->isFresh()) {
-            $content = $this->buildResourceTree($this->load(), $this->defaultAllowed);
+            $content = $this->buildResourceTree($this->load());
             $cache->write($content);
         }
         require_once $cache;
@@ -122,10 +122,9 @@ class Builder implements WarmableInterface
      * @param bool $defaultAllowed
      * @return string
      */
-    protected function buildResourceTree(array $resources, $defaultAllowed)
+    protected function buildResourceTree(array $resources)
     {
         $resources = var_export($resources, true);
-        $defaultAllowed = var_export($defaultAllowed, true);
         return <<<EOF
 <?php
 
@@ -136,7 +135,6 @@ use AclBundle\Resource\Tree;
  */
 class {$this->cacheClass()} extends Tree
 {
-    protected \$defaultAllowed = {$defaultAllowed};
     protected \$resources = {$resources};
 }
 EOF;

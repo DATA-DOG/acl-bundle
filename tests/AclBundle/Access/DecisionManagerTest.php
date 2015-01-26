@@ -11,7 +11,7 @@ class DecisionManagerTest extends ProphecyTestCase
     {
         parent::setup();
 
-        $provider = $this->prophesize('AclBundle\Resource\ProviderInterface');
+        $provider = $this->prophesize('AclBundle\Access\PolicyProviderInterface');
         $builder = $this->prophesize('AclBundle\Resource\Builder');
         $trans = $this->prophesize('AclBundle\Resource\Transformer\Transformator');
 
@@ -24,11 +24,10 @@ class DecisionManagerTest extends ProphecyTestCase
                 'edit' => false,
             ]
         ], false));
-        $builder->validate(['resource.view', 'app'])->shouldBeCalled();
 
-        $provider->resources()->willReturn([
-            'resource.view',
-            'app',
+        $provider->policies()->willReturn([
+            'resource.view' => true,
+            'app' => true,
         ]);
 
         $this->acl = new DecisionManager($builder->reveal(), $trans->reveal());

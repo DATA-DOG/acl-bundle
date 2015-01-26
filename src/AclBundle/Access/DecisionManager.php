@@ -2,7 +2,6 @@
 
 namespace AclBundle\Access;
 
-use AclBundle\Resource\ProviderInterface;
 use AclBundle\Resource\Builder as ResourceBuilder;
 use AclBundle\Resource\Transformer\Transformator;
 use AclBundle\Exception;
@@ -28,7 +27,7 @@ class DecisionManager
         $this->trans = $trans;
     }
 
-    public function provider(ProviderInterface $provider)
+    public function provider(PolicyProviderInterface $provider)
     {
         $this->providers[] = $provider;
     }
@@ -48,17 +47,14 @@ class DecisionManager
         if (null != $this->resourceTree) {
             return $this->resourceTree;
         }
-
-        // denied or allowed accesses
-        $accesses = [];
-        foreach ($this->providers as $provider) {
-            $accesses = array_merge($accesses, $provider->resources());
-        }
-        $this->resourceBuilder->validate($accesses);
-
-        // map accesses to a resource tree
         $this->resourceTree = $this->resourceBuilder->tree();
-        $this->resourceTree->map($accesses);
+
+        // map all policies
+        foreach ($this->providers as $provider) {
+            foreach ($provider->policies() as $resource => $policy) {
+                $this->resourceTree->policy($resource, $policy);
+            }
+        }
 
         return $this->resourceTree;
     }

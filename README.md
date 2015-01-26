@@ -6,8 +6,15 @@ This is the default **ACL** bundle configuration:
 ``` yaml
 acl:
   default_allowed: false # means that by default all ACL resources are denied
-  resource_providers:
-    bundle_configuration: true # by default looks in bundles for ACL resources
+  resource
+    providers:
+      config: true       # by default looks in bundles for ACL resources
+      annotations: true: # looks for controller annotations
+    transformers:
+      doctrine: true     # transforms entities or document resources with an ID at the end
+  access:
+    providers:
+      config: true       # //
 ```
 
 ## ACL resource
@@ -64,12 +71,14 @@ some accesses in the map:
 
 ``` yaml
 acl:
-  accesses:
-    admin:
-      - app_bundle
-    someusername:
-      - some.resource.view
-      - another.resource.somewhere.create
+  access:
+    policies:
+      admin:
+        - { resource: app_bundle, allow: true }          # allow every action for all resources under app_bundle
+      someusername:
+        - { resource: some.resource, allow: true }       # allow all actions on some.resource
+        - { resource: some.resource.edit, allow: false } # but deny - some.resource.edit
+        - { another.resource.somewhere.create }          # default allowed
 ```
 
 It will load this access map based on username of currently logged user from security context.

@@ -5,44 +5,41 @@ namespace AclBundle\Resource;
 abstract class Tree
 {
     protected $resources = [];
-    protected $defaultAllowed;
 
     public function all()
     {
         return $this->resources;
     }
 
-    public function map(array $accesses)
+    public function policy($resource, $allow)
     {
-        foreach ($accesses as $resource) {
-            $head = &$this->resources;
-            $points = explode('.', $resource); // access points
-            while ($point = array_shift($points)) {
-                if (!array_key_exists($point, $head)) {
-                    throw new \RuntimeException("The access to resource \"{$resource}\" cannot be mapped, since this resource was not registered.");
-                }
+        $head = &$this->resources;
+        $points = explode('.', $resource); // access points
+        while ($point = array_shift($points)) {
+            if (!array_key_exists($point, $head)) {
+                throw new \RuntimeException("The policy \"{$resource}\" cannot be mapped, since this resource was not registered before, check resource providers.");
+            }
 
-                // move down the head
-                $head = &$head[$point];
+            // move down the head
+            $head = &$head[$point];
 
-                // if last access point - means map to all remaining access points
-                if (!count($points)) {
-                    $this->mapRemainingAccessPoints($head);
-                    continue;
-                }
+            // if last access point - means map to all remaining access points
+            if (!count($points)) {
+                $this->mapRemainingAccessPoints($head, $allow);
+                continue;
             }
         }
         return $this;
     }
 
-    private function mapRemainingAccessPoints(&$points)
+    private function mapRemainingAccessPoints(&$points, $allow)
     {
         if (is_array($points)) {
             foreach ($points as &$point) {
-                $this->mapRemainingAccessPoints($point);
+                $this->mapRemainingAccessPoints($point, $allow);
             }
         } else {
-            $points = !$this->defaultAllowed;
+            $points = $allow;
         }
     }
 }

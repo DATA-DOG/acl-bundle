@@ -47,7 +47,7 @@ class TreeTest extends ProphecyTestCase
      */
     function it_should_fail_with_undefined_resource()
     {
-        $this->blank->map(['some.resource']);
+        $this->blank->policy('some.resource', true);
     }
 
     /**
@@ -55,7 +55,7 @@ class TreeTest extends ProphecyTestCase
      */
     function it_should_map_access_resource_action()
     {
-        $tree = $this->full->map(['some.resource.edit'])->all();
+        $tree = $this->full->policy('some.resource.edit', true)->all();
         $this->assertTrue($tree['some']['resource']['edit'], "Expected some.resource.edit action to turn to true");
     }
 
@@ -64,12 +64,15 @@ class TreeTest extends ProphecyTestCase
      */
     function it_should_map_access_resource_recursive()
     {
-        $tree = $this->full->map(['some'])->all();
+        $tree = $this->full
+            ->policy('some', true)
+            ->policy('some.entity.view', false)
+            ->all();
 
         $this->assertTrue($tree['some']['resource']['edit'], "Expected some.resource.edit action to turn to true");
         $this->assertTrue($tree['some']['entity']['edit'], "Expected some.entity.edit action to turn to true");
         $this->assertTrue($tree['some']['entity']['delete'], "Expected some.entity.delete action to turn to true");
-        $this->assertTrue($tree['some']['entity']['view'], "Expected some.entity.view action to turn to true");
+        $this->assertFalse($tree['some']['entity']['view'], "Expected some.entity.view action to turn to false");
     }
 
     /**
@@ -77,7 +80,7 @@ class TreeTest extends ProphecyTestCase
      */
     function it_should_map_access_resource_action_on_inverse_tree()
     {
-        $tree = $this->inverse->map(['some.entity.delete'])->all();
+        $tree = $this->inverse->policy('some.entity.delete', false)->all();
 
         $this->assertFalse($tree['some']['entity']['delete'], "Expected some.entity.delete action to turn to false");
     }

@@ -9,7 +9,17 @@ services:
 
   acl.resource.cache_warmer:
     class: AclBundle\CacheWarmer\AclResourceCacheWarmer
-    arguments: [@acl.resource.builder]
     public: false
+    arguments:
+      - @acl.resource.builder
     tags:
       - { name: kernel.cache_warmer }
+
+  acl.resource.cache:
+    class: AclBundle\CacheWarmer\ResourceCache
+    public: false
+    arguments:
+      - %kernel.cache_dir%
+      - %kernel.debug%
+      - %kernel.environment%
+      - %kernel.name%

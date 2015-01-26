@@ -24,7 +24,7 @@ class AclExtension extends Extension
         $loader->load('access_providers.yml');
 
         // add tags to resource providers
-        foreach ($config['resource_providers'] as $name => $enabled) {
+        foreach ($config['resource']['providers'] as $name => $enabled) {
             if (!$enabled) {
                 continue;
             }
@@ -37,22 +37,31 @@ class AclExtension extends Extension
             $container->getDefinition('acl.resource.provider.'.$name)->addTag('acl.resource.provider');
         }
 
+        // resource transformers, remove ones which are disabled
+        foreach ($config['resource']['transformers'] as $name => $enabled) {
+            if (!$enabled) {
+                $container->removeDefinition('acl.resource.transformer.'.$name);
+            }
+        }
+
         // access resource providers
-        foreach ($config['access_providers'] as $name => $enabled) {
+        foreach ($config['access']['providers'] as $name => $enabled) {
             $enabled && $container->getDefinition('acl.access.provider.'.$name)->addTag('acl.access.provider');
         }
-        if (count($config['accesses'])) {
+
+        if (count($config['access']['policies'])) {
             // if some username related resources are configured in bundle config, register it in provider
             $container->getDefinition('acl.access.provider.config')
                 ->addTag('acl.access.provider')
-                ->addArgument($config['accesses']);
+                ->addArgument($config['access']['policies']);
         }
+
         // resource builder
         $rb = new Definition($container->getParameter('acl.resource.builder.class'));
         // options
         $rb->addArgument([
             $config['default_allowed'], // if allowed to any resource by default
-            $this->getAlias().ucfirst($container->getParameter('kernel.environment')), // cache prefix
+            $this->getAlias().ucfirst($container->getParameter('kernel.environment')) . 'Resources', // cache prefix
             $container->getParameter('kernel.cache_dir'),
             $container->getParameter('kernel.debug'), // debug
         ]);

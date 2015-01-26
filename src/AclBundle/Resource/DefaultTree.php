@@ -4,9 +4,8 @@ namespace AclBundle\Resource;
 
 class DefaultTree extends Tree
 {
-    public function __construct(array $resources, $defaultAllowed)
+    public function __construct(array $resources)
     {
         $this->resources = $resources;
-        $this->defaultAllowed = $defaultAllowed;
     }
 }

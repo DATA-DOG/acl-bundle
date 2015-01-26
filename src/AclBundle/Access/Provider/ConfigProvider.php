@@ -2,23 +2,23 @@
 
 namespace AclBundle\Access\Provider;
 
-use AclBundle\Resource\ProviderInterface;
+use AclBundle\Access\PolicyProviderInterface;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 
-class ConfigProvider implements ProviderInterface
+class ConfigProvider implements PolicyProviderInterface
 {
     private $context;
-    private $accesses;
+    private $policies;
 
-    public function __construct(SecurityContextInterface $context, array $accesses = [])
+    public function __construct(SecurityContextInterface $context, array $policies = [])
     {
         $this->context = $context;
-        $this->accesses = $accesses;
+        $this->policies = $policies;
     }
 
-    public function resources()
+    public function policies()
     {
         $resources = [];
         if (!$token = $this->context->getToken()) {
@@ -34,10 +34,10 @@ class ConfigProvider implements ProviderInterface
             return [];
         }
 
-        if (!array_key_exists($user->getUsername(), $this->accesses)) {
+        if (!array_key_exists($user->getUsername(), $this->policies)) {
             return [];
         }
 
-        return $this->accesses[$user->getUsername()];
+        return $this->policies[$user->getUsername()];
     }
 }
