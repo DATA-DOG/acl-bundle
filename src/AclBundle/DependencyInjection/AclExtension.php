@@ -20,6 +20,7 @@ class AclExtension extends Extension
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
         $loader->load('resource_providers.yml');
+        $loader->load('resource_transformers.yml');
         $loader->load('access_providers.yml');
 
         // add tags to resource providers

@@ -13,6 +13,7 @@ class BuilderTest extends ProphecyTestCase
         $this->builder = new Builder([
             false, // denied access by default
             null, // null cache prefix means no cache class
+            null, // null cache dir
             true, // true for debug mode
         ]);
 

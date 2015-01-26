@@ -75,6 +75,43 @@ acl:
 It will load this access map based on username of currently logged user from security context.
 Though the user model must implement **Symfony\Component\Security\Core\User\UserInterface**
 
+### ACL resource transformers
+
+Sometimes it may be useful to transform an object to a specific resource with identifier for
+deep permission checks. As an example we could have **form type** resources identified by name:
+
+``` php
+<?php
+
+use AclBundle\Util;
+use AclBundle\Resource\TransformerInterface;
+use Symfony\Component\Form\FormTypeInterface;
+
+class FormTransformer implements TransformerInterface
+{
+    public function supports($object)
+    {
+        return $object instanceof FormTypeInterface;
+    }
+
+    public function transform($object)
+    {
+        return 'form.' . Util::underscore($object->getName());
+    }
+}
+```
+
+This transformer service then may be registered with tag: **acl.resource.transformer**, it accepts a priority attribute.
+When **acl** actions may be checked like:
+
+``` php
+<?php
+
+$container->get('acl')->isAllowed('edit', $formTypeObject);
+```
+
+**NOTE:** these resources must be provided, either through configuration or by resource provider service.
+
 ## Tests
 Tested with phpunit. To run all tests:
 

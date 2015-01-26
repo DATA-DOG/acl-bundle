@@ -4,6 +4,7 @@ namespace AclBundle\Access;
 
 use AclBundle\Resource\ProviderInterface;
 use AclBundle\Resource\Builder as ResourceBuilder;
+use AclBundle\Resource\Transformer\Transformator;
 
 class DecisionManager
 {
@@ -18,9 +19,12 @@ class DecisionManager
 
     private $resourceBuilder;
 
-    public function __construct(ResourceBuilder $builder)
+    private $trans;
+
+    public function __construct(ResourceBuilder $builder, Transformator $trans)
     {
         $this->resourceBuilder = $builder;
+        $this->trans = $trans;
     }
 
     public function provider(ProviderInterface $provider)
@@ -61,9 +65,7 @@ class DecisionManager
     protected function actions($resource)
     {
         if (is_object($resource)) {
-            $points = array_map(function($name) {
-                return strtolower(preg_replace('/(?<=\\w)(?=[A-Z])/', '_$1', $name));
-            }, explode('\\', get_class($resource)));
+            $points = explode('.', $this->trans->transform($resource));
         } elseif (is_string($resource)) {
             $points = explode('.', $resource);
         } else {

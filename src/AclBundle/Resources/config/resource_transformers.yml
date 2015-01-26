@@ -1,0 +1,8 @@
+services:
+  acl.resource.transformator:
+    class: AclBundle\Resource\Transformer\Transformator
+
+  acl.resource.transformer.default:
+    class: AclBundle\Resource\Transformer\DefaultTransformer
+    tags:
+      - { name: acl.resource.transformer, priority: -255 }

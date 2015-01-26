@@ -7,7 +7,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
 
-class BundleConfigurationProvider implements ProviderInterface
+class ConfigProvider implements ProviderInterface
 {
     private $kernel;
 

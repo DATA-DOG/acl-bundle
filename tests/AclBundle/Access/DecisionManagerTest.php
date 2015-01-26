@@ -13,6 +13,7 @@ class DecisionManagerTest extends ProphecyTestCase
 
         $provider = $this->prophesize('AclBundle\Resource\ProviderInterface');
         $builder = $this->prophesize('AclBundle\Resource\Builder');
+        $trans = $this->prophesize('AclBundle\Resource\Transformer\Transformator');
 
         $builder->tree()->willReturn(new DefaultTree([
             'resource' => [
@@ -30,7 +31,7 @@ class DecisionManagerTest extends ProphecyTestCase
             'app',
         ]);
 
-        $this->acl = new DecisionManager($builder->reveal());
+        $this->acl = new DecisionManager($builder->reveal(), $trans->reveal());
         $this->acl->provider($provider->reveal());
     }
 

@@ -1,5 +1,9 @@
 services:
   # adds tags based on configuration
-  acl.resource.provider.bundle_configuration:
-    class: AclBundle\Resource\Provider\BundleConfigurationProvider
+  acl.resource.provider.config:
+    class: AclBundle\Resource\Provider\ConfigProvider
     arguments: [@kernel]
+
+  acl.resource.provider.annotation:
+    class: AclBundle\Resource\Provider\AnnotationProvider
+    arguments: [@annotation_reader, @router]

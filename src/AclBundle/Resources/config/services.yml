@@ -5,7 +5,7 @@ parameters:
 services:
   acl.access.decision_manager:
     class: %acl.access.decision_manager.class%
-    arguments: [@acl.resource.builder]
+    arguments: [@acl.resource.builder, @acl.resource.transformator]
 
   acl.resource.cache_warmer:
     class: AclBundle\CacheWarmer\AclResourceCacheWarmer

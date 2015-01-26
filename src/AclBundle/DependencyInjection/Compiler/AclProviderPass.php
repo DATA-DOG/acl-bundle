@@ -19,7 +19,19 @@ class AclProviderPass implements CompilerPassInterface
         // tagged access resource providers
         $decisionManager = $c->getDefinition('acl.access.decision_manager');
         foreach ($c->findTaggedServiceIds('acl.access.provider') as $id => $attributes) {
-            $builder->addMethodCall('provider', [new Reference($id)]);
+            $decisionManager->addMethodCall('provider', [new Reference($id)]);
+        }
+
+        // resource transformations
+        $transformator = $c->getDefinition('acl.resource.transformator');
+        $refs = [];
+        foreach ($c->findTaggedServiceIds('acl.resource.transformer') as $id => $attributes) {
+            $priority = isset($attributes[0]['priority']) ? $attributes[0]['priority'] : 0;
+            $refs[$id] = $priority;
+        }
+        arsort($refs); // inverse sort, lowest priority is last
+        foreach ($refs as $id => $p) {
+            $transformator->addArgument(new Reference($id));
         }
     }
 }
