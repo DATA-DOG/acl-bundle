@@ -4,7 +4,6 @@ namespace AclBundle\Resource\Provider;
 
 use AclBundle\Resource\ProviderInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Yaml\Yaml;
 
 class ConfigProvider implements ProviderInterface
@@ -18,15 +17,15 @@ class ConfigProvider implements ProviderInterface
 
     public function resources()
     {
-        $dirs = [];
+        $try = [];
         foreach ($this->kernel->getBundles() as $bundle) {
-            $dirs[] = $bundle->getPath() . '/Resources/config';
+            $try[] = $bundle->getPath() . '/Resources/config/acl.yml';
         }
-        $locator = new FileLocator($dirs);
-        $files = $locator->locate('acl.yml', null, false);
-
         $resources = [];
-        foreach ($files as $file) {
+        foreach ($try as $file) {
+            if (!file_exists($file)) {
+                continue;
+            }
             $config = Yaml::parse(file_get_contents($file));
             if (!array_key_exists('resources', $config)) {
                 throw new \RuntimeException("The acl file: {$file} is not valid acl resource file.");

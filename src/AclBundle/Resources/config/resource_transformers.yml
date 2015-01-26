@@ -9,5 +9,6 @@ services:
 
   acl.resource.transformer.doctrine:
     class: AclBundle\Resource\Transformer\DoctrineTransformer
+    arguments: [@doctrine]
     tags:
       - { name: acl.resource.transformer, priority: -10 }

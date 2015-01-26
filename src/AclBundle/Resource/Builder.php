@@ -4,6 +4,7 @@ namespace AclBundle\Resource;
 
 use Symfony\Component\HttpKernel\CacheWarmer\WarmableInterface;
 use Symfony\Component\Config\ConfigCache;
+use AclBundle\Exception\InvalidResourceException;
 
 class Builder implements WarmableInterface
 {
@@ -95,15 +96,15 @@ class Builder implements WarmableInterface
     {
         foreach ($resources as $resource) {
             if (preg_match('/[^a-z0-9_\.]/', $resource)) {
-                throw new \UnexpectedValueException("ACL resource \"{$resource}\" can have only lowercase ASCII characters, dots and underscores");
+                throw new InvalidResourceException("ACL resource \"{$resource}\" can have only lowercase ASCII characters, dots and underscores");
             }
 
             if (preg_match('/\.$/', $resource)) {
-                throw new \UnexpectedValueException("ACL resource \"{$resource}\" cannot end with a dot");
+                throw new InvalidResourceException("ACL resource \"{$resource}\" cannot end with a dot");
             }
 
             if (preg_match('/^\./', $resource)) {
-                throw new \UnexpectedValueException("ACL resource \"{$resource}\" cannot start with a dot");
+                throw new InvalidResourceException("ACL resource \"{$resource}\" cannot start with a dot");
             }
         }
     }
