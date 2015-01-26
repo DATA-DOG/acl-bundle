@@ -6,3 +6,8 @@ services:
     class: AclBundle\Resource\Transformer\DefaultTransformer
     tags:
       - { name: acl.resource.transformer, priority: -255 }
+
+  acl.resource.transformer.doctrine:
+    class: AclBundle\Resource\Transformer\DoctrineTransformer
+    tags:
+      - { name: acl.resource.transformer, priority: -10 }

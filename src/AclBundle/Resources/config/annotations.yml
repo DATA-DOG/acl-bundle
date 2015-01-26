@@ -1,0 +1,11 @@
+# loaded if annotation resource provider is used
+services:
+  acl.controller.listener:
+    class: AclBundle\EventListener\ControllerListener
+    arguments: [@acl.access.decision_manager]
+    tags:
+      - { name: kernel.event_subscriber }
+
+  acl.resource.provider.annotation:
+    class: AclBundle\Resource\Provider\AnnotationProvider
+    arguments: [@annotation_reader, @router]

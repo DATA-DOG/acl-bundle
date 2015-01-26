@@ -4,6 +4,3 @@ services:
     class: AclBundle\Resource\Provider\ConfigProvider
     arguments: [@kernel]
 
-  acl.resource.provider.annotation:
-    class: AclBundle\Resource\Provider\AnnotationProvider
-    arguments: [@annotation_reader, @router]

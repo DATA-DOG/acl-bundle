@@ -5,6 +5,7 @@ namespace AclBundle\Access;
 use AclBundle\Resource\ProviderInterface;
 use AclBundle\Resource\Builder as ResourceBuilder;
 use AclBundle\Resource\Transformer\Transformator;
+use AclBundle\Exception;
 
 class DecisionManager
 {
@@ -42,7 +43,7 @@ class DecisionManager
         return $actions[$action];
     }
 
-    protected function tree()
+    public function tree()
     {
         if (null != $this->resourceTree) {
             return $this->resourceTree;
@@ -62,7 +63,7 @@ class DecisionManager
         return $this->resourceTree;
     }
 
-    protected function actions($resource)
+    public function actions($resource)
     {
         if (is_object($resource)) {
             $points = explode('.', $this->trans->transform($resource));
@@ -76,7 +77,7 @@ class DecisionManager
         $source = implode('.', $points);
         while ($point = array_shift($points)) {
             if (!array_key_exists($point, $result)) {
-                throw new \RuntimeException("The resource \"{$source}\" is not registered, cannot find any actions.");
+                throw new Exception\ResourceNotFoundException($source);
             }
             $result = $result[$point];
         }

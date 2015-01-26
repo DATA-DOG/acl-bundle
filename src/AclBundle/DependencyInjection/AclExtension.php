@@ -25,7 +25,16 @@ class AclExtension extends Extension
 
         // add tags to resource providers
         foreach ($config['resource_providers'] as $name => $enabled) {
-            $enabled && $container->getDefinition('acl.resource.provider.'.$name)->addTag('acl.resource.provider');
+            if (!$enabled) {
+                continue;
+            }
+
+            switch ($name) {
+            case 'annotation':
+                $loader->load('annotations.yml');
+                break;
+            }
+            $container->getDefinition('acl.resource.provider.'.$name)->addTag('acl.resource.provider');
         }
 
         // access resource providers
