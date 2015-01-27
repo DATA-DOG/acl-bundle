@@ -10,8 +10,6 @@ The example will provide these features:
 Policy group, allows to group policies.
 
 ``` php
-<?php
-
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -77,8 +75,6 @@ class Group
 Policy.
 
 ```php
-<?php
-
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -142,8 +138,6 @@ class Policy
 Add relations to your **User** entity:
 
 ``` php
-<?php
-
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -205,8 +199,6 @@ class User implements UserInterface
 In order to load these policies for a user, we need to register a policy provider:
 
 ``` php
-<?php
-
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Security\Core\SecurityContextInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -298,8 +290,6 @@ resources:
 
 Then we can create policy groups for users:
 ``` php
-<?php
-
 $em = $container->get('doctrine')->getManager();
 
 $grantAppUser = new Policy('app.user', true);

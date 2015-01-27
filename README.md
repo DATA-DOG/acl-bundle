@@ -17,7 +17,7 @@ acl:
   resource:
     providers:
       config: true       # by default looks in bundles for ACL resources
-      annotations: true: # looks for controller annotations
+      annotations: true  # looks for controller annotations
     transformers:
       doctrine: true     # transforms entities or document resources with an ID at the end
 ```
@@ -25,7 +25,9 @@ acl:
 ## ACL resource
 A resource is basically represented by a string.
 
-    $acl->isGranted("action", "app.resource.string");
+``` php
+$acl->isGranted("action", "app.resource.string");
+```
 
 Would be **"app.resource.string.action"**. Action is concatenated. That way
 it is easier to store and match resources.
@@ -38,8 +40,6 @@ Providers are used to collect all ACL resources from bundles.
 The ACL provider interface:
 
 ``` php
-<?php
-
 namespace AclBundle\Resource;
 
 interface ProviderInterface
@@ -129,8 +129,6 @@ Sometimes it may be useful to transform an object to a specific resource with id
 deep permission checks. As an example we could have **form type** resources identified by name:
 
 ``` php
-<?php
-
 use AclBundle\Util;
 use AclBundle\Resource\TransformerInterface;
 use Symfony\Component\Form\FormTypeInterface;
@@ -153,8 +151,6 @@ This transformer service then may be registered with tag: **acl.resource.transfo
 When **acl** actions may be checked like:
 
 ``` php
-<?php
-
 $container->get('acl.access.decision_manager')->isGranted('edit', $formTypeObject);
 ```
 
