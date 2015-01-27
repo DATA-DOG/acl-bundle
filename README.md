@@ -1,5 +1,9 @@
 # ACL management bundle
 
+ACL comes without any database requirements. It is bare **ACL** manager.
+The bundle only registers **resource** and **access policy** providers.
+See **DOCTRINE.md** which shows how to configure database for policy management.
+
 ## Configuration
 This is the default **ACL** bundle configuration:
 
@@ -26,7 +30,7 @@ Would be **"app.resource.string.action"**. Action is concatenated. That way
 it is easier to store and match resources.
 
 - **app.resource.string** - is a resource acccess point.
-- **action** - is any action that can be done with the resource bellow.
+- **action** - is any action that can be done with the resource.
 
 ## ACL resource providers
 Providers are used to collect all ACL resources from bundles.
@@ -61,9 +65,43 @@ resources:
   - app_bundle.entity.page.edit
 ```
 
-## ACL access providers
-ACL access providers, must provide a resource list accessible by currently logged in user.
-Every provider must implement the same **AclBundle\Resource\ProviderInterface**.
+## ACL policy providers
+ACL policy providers must implement **AclBundle\Access\PolicyProviderInterface** and implement
+one method which return a list of policies, where key is a resource or resource branch and
+value is boolean - whether the resource is granted or denied.
+
+Given we have these resources:
+```yaml
+resources:
+  - app.user.edit
+  - app.user.view
+  - app.user.remove
+  - app.user.add
+```
+
+We can make policies for leaf actions:
+```yaml
+acl:
+  access:
+    policies:
+      luke@skywalker.com:
+        - { resource: app.user.edit, granted: true }
+        - { resource: app.user.view, granted: true }
+        - { resource: app.user.add,  granted: true }
+```
+
+Or we can do the same thing by granting access to the branch and denying leaf:
+```yaml
+acl:
+  access:
+    policies:
+      luke@skywalker.com:
+        - { resource: app.user,        granted: true }
+        - { resource: app.user.remove, granted: false }
+```
+
+**NOTE:** The configuration above is the **ACL** bundle extension configuration. Which should be located in
+kernel configuration directory.
 
 ### Config provider
 For very simple use cases, config provider may be used. To enable it, acl configuration must contain
