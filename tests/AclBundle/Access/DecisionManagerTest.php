@@ -39,8 +39,8 @@ class DecisionManagerTest extends ProphecyTestCase
      */
     function it_should_allow_access_to_provided_resource()
     {
-        $this->assertTrue($this->acl->isAllowed('view', 'resource'), 'Expected resource.view to be allowed');
-        $this->assertTrue($this->acl->isAllowed('edit', 'app'), 'Expected app.edit to be allowed');
+        $this->assertTrue($this->acl->isGranted('view', 'resource'), 'Expected resource.view to be allowed');
+        $this->assertTrue($this->acl->isGranted('edit', 'app'), 'Expected app.edit to be allowed');
     }
 
     /**
@@ -48,6 +48,6 @@ class DecisionManagerTest extends ProphecyTestCase
      */
     function it_should_deny_restricted_resources()
     {
-        $this->assertFalse($this->acl->isAllowed('edit', 'resource'), 'Expected resource.edit to be denied');
+        $this->assertFalse($this->acl->isGranted('edit', 'resource'), 'Expected resource.edit to be denied');
     }
 }

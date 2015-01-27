@@ -30,7 +30,7 @@ class ControllerListener implements EventSubscriberInterface
         $action = Util::underscore(preg_replace('/Action$/', '', $action));
 
         try {
-            if (!$allowed = $this->dm->isAllowed($action, $resource)) {
+            if (!$allowed = $this->dm->isGranted($action, $resource)) {
                 throw new AccessDeniedHttpException("User is not allowed to \"{$action}\" resource: \"{$resource}\"");
             }
         } catch (ResourceNotFoundException $e) {

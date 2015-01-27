@@ -32,7 +32,7 @@ class DecisionManager
         $this->providers[] = $provider;
     }
 
-    public function isAllowed($action, $resource)
+    public function isGranted($action, $resource)
     {
         $actions = $this->actions($resource);
         if (!array_key_exists($action, $actions)) {

@@ -21,7 +21,7 @@ class AclExtension extends Extension
         $loader->load('services.yml');
         $loader->load('resource_providers.yml');
         $loader->load('resource_transformers.yml');
-        $loader->load('access_providers.yml');
+        $loader->load('policy_providers.yml');
 
         // add tags to resource providers
         foreach ($config['resource']['providers'] as $name => $enabled) {
@@ -46,12 +46,12 @@ class AclExtension extends Extension
 
         // access resource providers
         foreach ($config['access']['providers'] as $name => $enabled) {
-            $enabled && $container->getDefinition('acl.access.provider.'.$name)->addTag('acl.access.provider');
+            $enabled && $container->getDefinition('acl.policy.provider.'.$name)->addTag('acl.policy.provider');
         }
 
         if (count($config['access']['policies'])) {
             // if some username related resources are configured in bundle config, register it in provider
-            $container->getDefinition('acl.access.provider.config')
+            $container->getDefinition('acl.policy.provider.config')
                 ->addTag('acl.access.provider')
                 ->addArgument($config['access']['policies']);
         }

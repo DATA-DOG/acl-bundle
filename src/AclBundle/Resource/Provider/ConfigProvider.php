@@ -17,9 +17,11 @@ class ConfigProvider implements ProviderInterface
 
     public function resources()
     {
-        $try = [];
+        // look in kernel directory
+        $try = [$this->kernel->getRootDir() . '/Resources/config/acl_resources.yml'];
+        // look in all bundles
         foreach ($this->kernel->getBundles() as $bundle) {
-            $try[] = $bundle->getPath() . '/Resources/config/acl.yml';
+            $try[] = $bundle->getPath() . '/Resources/config/acl_resources.yml';
         }
         $resources = [];
         foreach ($try as $file) {

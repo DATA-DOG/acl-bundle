@@ -20,7 +20,7 @@ acl:
 ## ACL resource
 A resource is basically represented by a string.
 
-    $acl->isAllowed("action", "app.resource.string");
+    $acl->isGranted("action", "app.resource.string");
 
 Would be **"app.resource.string.action"**. Action is concatenated. That way
 it is easier to store and match resources.
@@ -53,7 +53,7 @@ a resource map as required by interface.
 
 ### Bundle configuration
 This type of ACL resource provider is enabled by default. It looks for configuration file:
-**../VendorBundle/Resources/config/acl.yml** and loads all resources from each bundle.
+**../VendorBundle/Resources/config/acl_resources.yml** and loads all resources from each bundle.
 
 ```yaml
 resources:
@@ -116,7 +116,7 @@ When **acl** actions may be checked like:
 ``` php
 <?php
 
-$container->get('acl')->isAllowed('edit', $formTypeObject);
+$container->get('acl.access.decision_manager')->isGranted('edit', $formTypeObject);
 ```
 
 **NOTE:** these resources must be provided, either through configuration or by resource provider service.

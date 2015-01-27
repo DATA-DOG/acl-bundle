@@ -18,7 +18,7 @@ class AclProviderPass implements CompilerPassInterface
 
         // tagged access resource providers
         $decisionManager = $c->getDefinition('acl.access.decision_manager');
-        foreach ($c->findTaggedServiceIds('acl.access.provider') as $id => $attributes) {
+        foreach ($c->findTaggedServiceIds('acl.policy.provider') as $id => $attributes) {
             $decisionManager->addMethodCall('provider', [new Reference($id)]);
         }
 
