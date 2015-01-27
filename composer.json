@@ -2,6 +2,10 @@
   "name": "data-dog/acl-bundle",
   "type": "bundle",
   "description": "ACL management bundle",
+  "keywords": [
+    "acl", "permission", "access control lists", "security"
+  ],
+  "license": "MIT",
 
   "autoload": {
     "psr-0": {
@@ -19,15 +23,17 @@
     "phpspec/prophecy-phpunit": "~1.0"
   },
 
-  "bin": [
-    "src/AclBundle/Resources/bin/acl"
-  ],
-
   "archive": {
     "exclude": ["vendor", "tests", "bin"]
   },
 
   "config": {
     "bin-dir": "bin"
+  },
+
+  "extra": {
+    "branch-alias": {
+      "dev-master": "0.1.x-dev"
+    }
   }
 }
