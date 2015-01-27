@@ -4,21 +4,22 @@ ACL comes without any database requirements. It is bare **ACL** manager.
 The bundle only registers **resource** and **access policy** providers.
 See **DOCTRINE.md** which shows how to configure database for policy management.
 
+- Has symfony profiler bar
+- Does not depend on database
+- Basic resource and policy concept
+
 ## Configuration
 This is the default **ACL** bundle configuration:
 
 ``` yaml
 acl:
   default_allowed: false # means that by default all ACL resources are denied
-  resource
+  resource:
     providers:
       config: true       # by default looks in bundles for ACL resources
       annotations: true: # looks for controller annotations
     transformers:
       doctrine: true     # transforms entities or document resources with an ID at the end
-  access:
-    providers:
-      config: true       # //
 ```
 
 ## ACL resource

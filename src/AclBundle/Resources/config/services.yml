@@ -23,3 +23,10 @@ services:
       - %kernel.debug%
       - %kernel.environment%
       - %kernel.name%
+
+  acl.profiler.data_collector:
+    class: AclBundle\Profiler\AclDataCollector
+    arguments: [@acl.access.decision_manager, @security.context]
+    tags:
+      - { name: data_collector, template: "AclBundle:Profiler:acl.html.twig", id: "acl" }
+

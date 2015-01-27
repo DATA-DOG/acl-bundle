@@ -1,0 +1,59 @@
+{% extends 'WebProfilerBundle:Profiler:layout.html.twig' %}
+
+{% block toolbar %}
+  {% set icon %}
+      <img width="20" height="28" alt="Lock" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAABIAAAASABGyWs+AAAB1klEQVRIx53VP04bURAG8N/+kY2lUCAkqkTQ5QBJRBPJF+ACtECTIyAouEUauAAHSG+JBiQaOmjT0JgqUjDO7qTwBmx213aYJ632zc58O2++b3Zptkwys09kzYFJS3qho6/vA34aGHiSKSxlGXbcCaWornd2qidLpR9WaaUHD9VdOFwGIsOeMFY4s23Dhm1nCmNhbxFEiveGwthutZ9cd42FoffP3kbLcSyEI3RkEolMB0dCOK6itHMyEO6tzzCUYN29MHjNXDqTHlZt4cZQRyavVqZj6AZbVsU0RP4KINfDEMUM61nl7cmryBpAotTR18OmHe+UM5X+somevh+epiFeTrnmUijEnFUIl9bqGs5xIowq7f1pWBNdjoSTl9r/HSHw8bmpyRy5pFVk1FlILWtpMwt1K5VIF2mvbbRDIkfMMj8b2Y4dEtf27buuk9Y8hefCeIquK13QdTVF71g4f5nKtPX0nBpZsWLktPLM7+fbLJ3jP9D16FHXQXtk3goQvrjwHd98Fv8LMJm4T84aaWwBiBpEqWgUUiyrxHRxk9NX1C1nZb2CBLdURS9Kvq0L/80flGSm6z1frStaex4yQxd+N09HsqQu0+kXJDWIZEH65D/5bH8BalDEMLvUR7oAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDEtMjdUMDc6MTk6MjUtMDU6MDB+pYlCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTAxLTI3VDA3OjE5OjI1LTA1OjAwD/gx/gAAAABJRU5ErkJggg=="/>
+      <span class="sf-toolbar-status">ACL</span>
+  {% endset %}
+
+  {% include '@WebProfiler/Profiler/toolbar_item.html.twig' with { 'link': profiler_url } %}
+{% endblock %}
+
+{% block menu %}
+<span class="label">
+  <span class="icon"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAAgY0hSTQAAeiYAAICEAAD6AAAAgOgAAHUwAADqYAAAOpgAABdwnLpRPAAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAABIAAAASABGyWs+AAAB1klEQVRIx53VP04bURAG8N/+kY2lUCAkqkTQ5QBJRBPJF+ACtECTIyAouEUauAAHSG+JBiQaOmjT0JgqUjDO7qTwBmx213aYJ632zc58O2++b3Zptkwys09kzYFJS3qho6/vA34aGHiSKSxlGXbcCaWornd2qidLpR9WaaUHD9VdOFwGIsOeMFY4s23Dhm1nCmNhbxFEiveGwthutZ9cd42FoffP3kbLcSyEI3RkEolMB0dCOK6itHMyEO6tzzCUYN29MHjNXDqTHlZt4cZQRyavVqZj6AZbVsU0RP4KINfDEMUM61nl7cmryBpAotTR18OmHe+UM5X+somevh+epiFeTrnmUijEnFUIl9bqGs5xIowq7f1pWBNdjoSTl9r/HSHw8bmpyRy5pFVk1FlILWtpMwt1K5VIF2mvbbRDIkfMMj8b2Y4dEtf27buuk9Y8hefCeIquK13QdTVF71g4f5nKtPX0nBpZsWLktPLM7+fbLJ3jP9D16FHXQXtk3goQvrjwHd98Fv8LMJm4T84aaWwBiBpEqWgUUiyrxHRxk9NX1C1nZb2CBLdURS9Kvq0L/80flGSm6z1frStaex4yQxd+N09HsqQu0+kXJDWIZEH65D/5bH8BalDEMLvUR7oAAAAldEVYdGRhdGU6Y3JlYXRlADIwMTUtMDEtMjdUMDc6MTk6MjUtMDU6MDB+pYlCAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDE1LTAxLTI3VDA3OjE5OjI1LTA1OjAwD/gx/gAAAABJRU5ErkJggg==" alt="Lock"></span>
+  <strong>ACL</strong>
+</span>
+{% endblock %}
+
+{% block panel %}
+<h2>Accessible resources</h2>
+<table>
+  <tr>
+    <th>Resource</th>
+    <th>Permission</th>
+    <th>Matched Policy</th>
+  </tr>
+  <tr>
+  {% for resource, policy in collector.resources %}
+    <tr>
+      <td>{{ resource }}</td>
+      <td style="color: {% if policy.granted %}green{% else %}red{% endif %}">
+        {% if policy.granted %}grant{% else %}deny{% endif %}
+      </td>
+      <td>{{ policy.policy ?: "-" }}</td>
+    </tr>
+  {% else %}
+    <tr><td colspan="3">There are no ACL resources registered</td></tr>
+  {% endfor %}
+</table>
+
+<h2>Policies for ({{ collector.username }})</h2>
+<table>
+  <tr>
+    <th>Resource Policy</th>
+    <th>Permission</th>
+  </tr>
+  <tr>
+  {% for resource, granted in collector.policies %}
+    <tr>
+      <td>{{ resource }}</td>
+      <td style="color: {% if granted %}green{% else %}red{% endif %}">
+        {% if granted %}grant{% else %}deny{% endif %}
+      </td>
+    </tr>
+  {% else %}
+    <tr><td colspan="2">There are no ACL policies for current user</td></tr>
+  {% endfor %}
+</table>
+{% endblock %}
