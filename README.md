@@ -153,8 +153,19 @@ When **acl** actions may be checked like:
 ``` php
 $container->get('acl.access.decision_manager')->isGranted('edit', $formTypeObject);
 ```
-
 **NOTE:** these resources must be provided, either through configuration or by resource provider service.
+
+For convenience, make a service alias:
+
+```yaml
+# app/config/config.yml or other
+services:
+  acl: @acl.access.decision_manager
+```
+
+## Questions and Answers
+**Q:** Why it does not have a vendor namespace.
+**A:** Hopefully, you need only one AclBundle in your projects, cheers.
 
 ## Tests
 Tested with phpunit. To run all tests:

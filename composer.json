@@ -3,8 +3,9 @@
   "type": "bundle",
   "description": "ACL management bundle",
   "keywords": [
-    "acl", "permission", "access control lists", "security"
+    "acl", "permission", "access control lists", "security", "bundle", "symfony"
   ],
+  "homepage": "https://github.com/DATA-DOG/acl-bundle",
   "license": "MIT",
 
   "autoload": {
