@@ -1,4 +1,4 @@
-# ACL management bundle
+# ACL management bundle [![Build Status](https://secure.travis-ci.org/DATA-DOG/acl-bundle.png?branch=master)](http://travis-ci.org/DATA-DOG/acl-bundle)
 
 ACL comes without any database requirements. It is bare **ACL** manager.
 The bundle only registers **resource** and **access policy** providers.
