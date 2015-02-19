@@ -2,3 +2,4 @@
 /bin
 /composer.lock
 /phpunit.xml
+/.idea

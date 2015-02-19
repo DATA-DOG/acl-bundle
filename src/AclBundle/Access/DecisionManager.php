@@ -47,16 +47,22 @@ class DecisionManager
         if (null != $this->resourceTree) {
             return $this->resourceTree;
         }
-        $this->resourceTree = $this->resourceBuilder->tree();
+
+        return $this->resourceTree = $this->buildTree();
+    }
+
+    public function buildTree()
+    {
+        $resourceTree = $this->resourceBuilder->tree();
 
         // map all policies
         foreach ($this->providers as $provider) {
             foreach ($provider->policies() as $resource => $policy) {
-                $this->resourceTree->policy($resource, $policy);
+                $resourceTree->policy($resource, $policy);
             }
         }
 
-        return $this->resourceTree;
+        return $resourceTree;
     }
 
     public function actions($resource)
