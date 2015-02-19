@@ -53,7 +53,7 @@ class DecisionManager
 
     public function buildTree()
     {
-        $resourceTree = $this->resourceBuilder->tree();
+        $resourceTree = clone $this->resourceBuilder->tree();
 
         // map all policies
         foreach ($this->providers as $provider) {
