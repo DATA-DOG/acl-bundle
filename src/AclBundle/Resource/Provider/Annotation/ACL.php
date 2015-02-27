@@ -8,5 +8,5 @@ namespace AclBundle\Resource\Provider\Annotation;
  */
 class ACL
 {
-    public $resource;
+    public $value;
 }

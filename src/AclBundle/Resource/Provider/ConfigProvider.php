@@ -31,18 +31,12 @@ class ConfigProvider implements ProviderInterface
             }
 
             $config = Yaml::parse(file_get_contents($file));
-            if(empty($config)) {
-                continue;
-            }
 
-            if (!array_key_exists('resources', $config)) {
+            if (!array_key_exists('resources', (array)$config)) {
                 throw new \RuntimeException("The acl file: {$file} is not valid acl resource file.");
             }
-            if(empty($config['resources'])) {
-                continue;
-            }
 
-            $resources = array_merge($resources, $config['resources']);
+            $resources = array_merge($resources, (array)$config['resources']);
         }
 
         return $resources;

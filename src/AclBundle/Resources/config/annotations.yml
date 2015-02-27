@@ -2,7 +2,7 @@
 services:
   acl.controller.listener:
     class: AclBundle\EventListener\ControllerListener
-    arguments: [@acl.access.decision_manager]
+    arguments: [@acl.access.decision_manager, @annotation_reader]
     tags:
       - { name: kernel.event_subscriber }
 
