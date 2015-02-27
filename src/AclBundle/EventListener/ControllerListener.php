@@ -33,25 +33,23 @@ class ControllerListener implements EventSubscriberInterface
         $ref = new \ReflectionClass($ctrl);
         $annotations = $this->reader->getMethodAnnotations($ref->getMethod($action));
 
-        $resource = Util::classToResource($ctrl);
-        $action = Util::underscore(preg_replace('/Action$/', '', $action));
+        $acl = current(array_filter($annotations, function($annotation) {
+            return $annotation instanceof ACL;
+        }));
 
-        foreach ($annotations as $annotation) {
-            if (!$annotation instanceof ACL) {
-                continue;
-            }
-
-            if (strlen($annotation->value)) {
-                $parts = explode('.', $annotation->value);
+        if ($acl) {
+            if (strlen($acl->value)) {
+                $parts = explode('.', $acl->value);
 
                 $action = array_pop($parts);
                 $resource = implode('.', $parts);
-                break;
+            } else {
+                $resource = Util::classToResource($ctrl);
+                $action = Util::underscore(preg_replace('/Action$/', '', $action));
             }
-        }
-
-        if (!$allowed = $this->dm->isGranted($action, $resource)) {
-            throw new AccessDeniedHttpException("User is not allowed to \"{$action}\" resource: \"{$resource}\"");
+            if (!$allowed = $this->dm->isGranted($action, $resource)) {
+                throw new AccessDeniedHttpException("User is not allowed to \"{$action}\" resource: \"{$resource}\"");
+            }
         }
     }
 
